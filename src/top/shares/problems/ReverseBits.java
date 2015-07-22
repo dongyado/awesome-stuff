@@ -15,35 +15,27 @@ public class ReverseBits {
 
 	public static void main(String[] args) 
 	{
-
-		System.out.println( reverseBits( 2 ));
-	
+		System.out.println( reverseBits( 43261596 ));
 	}
 	
-	public static int reverseBits(int n) {
-        long num = (long)n;
+	public static int reverseBits(int n) 
+	{
 		long mask = 0X80000000L;
-		long f = 0L; 
-		long fmask = 1L;
-		long flag = 0;
+		int f = 0; 
 		
+		/**
+		 * use mask shift right to find witch bit is 1, 
+		 *  and use 1 shift left to set that bit to 1
+		 * 
+		 * */
 		for ( int i = 0; i < 32; i++)
 		{
-			fmask = 1;
-			flag = num & mask;
-			if (flag  > 0)
+			if ((n & mask) > 0)
 			{
-				fmask <<= i;
-				f |= fmask;
+				f |= 1 << i;
 			}
 			mask >>= 1;
 		}
-		return (int)f;
-    }
-	
-	public static long getUnsignedInt (int num)
-	{     
-		//将int数据转换为0~4294967295 (0xFFFFFFFF即DWORD)。
-        return num & 0x0FFFFFFFF ;
+		return f;
     }
 }
