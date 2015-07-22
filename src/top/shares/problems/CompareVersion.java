@@ -32,36 +32,25 @@ public class CompareVersion {
 		
 		int maxLength = parts1.length > parts2.length ? parts1.length : parts2.length;
 		
-		String[] parr1 = new String[maxLength];
-		String[] parr2 = new String[maxLength];
-		
-		
+		int p1,p2;
 		for (int i = 0; i < maxLength; i++)
 		{	
 			if (parts1.length > i) {
-				parr1[i] = parts1[i];
+				p1 = Integer.parseInt(parts1[i]);
 			} else {
-				parr1[i] = "0";
+				p1 = 0;
 			}
 			
 			if (parts2.length > i) {
-				parr2[i] = parts2[i];
+				p2 = Integer.parseInt(parts2[i]);
 			} else {
-				parr2[i] = "0";
+				p2 = 0;
 			}
-		}
-		
-		int p1,p2;
-		
-		for (int i = 0; i < maxLength; i++)
-		{
-			p1 = Integer.parseInt(parr1[i]);
-			p2 = Integer.parseInt(parr2[i]);
+			
 			if(p1 < p2) return -1;
 			if(p1 > p2) return 1;
-			
-			
 		}
+
 		return 0;
 	}
 }
