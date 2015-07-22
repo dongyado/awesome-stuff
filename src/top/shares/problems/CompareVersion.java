@@ -19,7 +19,6 @@ package top.shares.problems;
 public class CompareVersion {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		System.out.println(compareVersion("1.02", "1.01"));
 
