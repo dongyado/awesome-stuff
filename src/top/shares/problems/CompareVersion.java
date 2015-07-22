@@ -21,29 +21,47 @@ public class CompareVersion {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		System.out.println(compareVersion("01", "1"));
+		System.out.println(compareVersion("1.02", "1.01"));
 
 	}
 
-	public static int compareVersion(String  v1, String v2)
+	public static int compareVersion(String  version1, String version2)
 	{
-		String[] parts1 = v1.split("\\.");
-		String[] parts2 = v2.split("\\.");
+		String[] parts1 = version1.split("\\.");
+		String[] parts2 = version2.split("\\.");
 		
-		int minLength = parts1.length < parts2.length ? parts1.length : parts2.length;
-		int p1,p2;
+		int maxLength = parts1.length > parts2.length ? parts1.length : parts2.length;
 		
-		for (int i = 0; i < minLength; i++)
-		{
-			p1 = Integer.parseInt(parts1[i]);
-			p2 = Integer.parseInt(parts2[i]);
-			if(p1 < p2) return -1;
-			if(p1 > p2) return 1;
+		String[] parr1 = new String[maxLength];
+		String[] parr2 = new String[maxLength];
+		
+		
+		for (int i = 0; i < maxLength; i++)
+		{	
+			if (parts1.length > i) {
+				parr1[i] = parts1[i];
+			} else {
+				parr1[i] = "0";
+			}
+			
+			if (parts2.length > i) {
+				parr2[i] = parts2[i];
+			} else {
+				parr2[i] = "0";
+			}
 		}
 		
-		if (parts1.length < parts2.length) return -1;
-		else if(parts1.length > parts2.length) return 1;
+		int p1,p2;
 		
+		for (int i = 0; i < maxLength; i++)
+		{
+			p1 = Integer.parseInt(parr1[i]);
+			p2 = Integer.parseInt(parr2[i]);
+			if(p1 < p2) return -1;
+			if(p1 > p2) return 1;
+			
+			
+		}
 		return 0;
 	}
 }
