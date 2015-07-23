@@ -1,4 +1,4 @@
-package top.shares.funny.lru;
+package top.shares.util;
 
 /**
  * HashMap implements
