@@ -1,8 +1,15 @@
-#promotion
+# Awesome stuffs
 
-这个项目用于提升自身基础，包括算法和数据结构，以及一些有趣的问题。
+Implement or solve:
+* Some interesting algorithms, 
+* Data structure
+* Interesting problems
 
-## 已完成
-1. lru cache
-2. reverse bits
-3. compare version
+## Finished
+### algorithm
+* lru cache
+* reverse bits
+* compare version
+
+### data structure
+* linked list
