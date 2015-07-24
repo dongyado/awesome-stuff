@@ -1,8 +1,9 @@
 package top.shares.util.linkedlist;
 
 /**
- *  list node enty
+ *  list node entry
  * 
+ *  @author dongyado<dongyado@gmail.com>
  * */
 public class ListNode<T>{
 	
@@ -16,29 +17,5 @@ public class ListNode<T>{
 		this.data = data;
 		this.prev = prev;
 		this.next = next;
-	}
-
-	public ListNode getPrev() {
-		return prev;
-	}
-
-	public void setPrev(ListNode prev) {
-		this.prev = prev;
-	}
-
-	public ListNode getNext() {
-		return next;
-	}
-
-	public void setNext(ListNode next) {
-		this.next = next;
-	}
-
-	public T getData() {
-		return data;
-	}
-
-	public void setData(T data) {
-		this.data = data;
 	}
 }

@@ -1,4 +1,4 @@
-package top.shares.util;
+package top.shares.util.hashmap;
 
 /**
  * HashMap implements

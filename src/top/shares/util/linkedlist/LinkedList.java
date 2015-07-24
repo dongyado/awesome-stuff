@@ -1,5 +1,10 @@
 package top.shares.util.linkedlist;
 
+/**
+ * Simple Linked list implement.
+ * 
+ * @author dongyado<dongyado@gmail.com>
+ * */
 public class LinkedList<T> {
 
 	private ListNode<T> head;
@@ -16,15 +21,40 @@ public class LinkedList<T> {
 		
 	}
 	
-	
-	public void addFirst(ListNode node)
-	{
+	private void insertNode(ListNode<T> node, ListNode<T> prev, ListNode<T> next){
+		node.prev = prev;
+		node.next = next;
 		
+		prev.next = node;
+		next.prev = node;
+		
+		this.length++;
+	}
+	
+	
+	public void addFirst(T value)
+	{
+		ListNode<T> node = new ListNode<T> (value, null, null);
+		
+		this.insertNode(node, this.head, this.head.next);
 	}
 
-	public void addLast(ListNode node)
+	public void addLast(T value)
 	{
+		ListNode<T> node = new ListNode<T> (value, null, null);
 		
+		this.insertNode(node, this.tail.prev, this.tail);
+	}
+	
+	
+	public void printList()
+	{
+		ListNode<T> node = this.head.next;
+		while(node.next != null)
+		{
+			System.out.println((T) node.data);
+			node = node.next;
+		}
 	}
 	
 	
