@@ -15,7 +15,7 @@ public class Point {
 	public int g;
 	
 	// f = g + h;
-	public int f;
+	private int f;
 	
 	// position
 	public int x;
@@ -23,13 +23,17 @@ public class Point {
 	
 	private String key = null;
 	
+	public int getF(){
+		return this.g + this.h;
+	}
+	
 	public String getKey(){
 		return this.x + "_" + this.y;
 	}
 	
 	@Override
 	public String toString(){	
-		return "[" + this.x + ":" + this.y + ":" + this.walkable + ":" + this.g + ":" + this.h + "]";
+		return "[" + this.x + ":" + this.y + ":" + this.walkable + ":" + this.g + ":" + this.h + ":"+ this.getF() +"]";
 	}
 	
 	// walkable;

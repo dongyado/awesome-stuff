@@ -72,15 +72,22 @@ public class AStar {
 			this.matrix.add(list);
 		}
 		
-
-				
+		// -------------------------------------------------------------------
+		// search start
+		this.startPoint.g = 0;
 		this.openList.put(this.startPoint.getKey(), this.startPoint);
 		
-		//this.traversalAroundPoints(this.startPoint);
 		
 		
-		this.traversalAroundPoints(new Point(3, 3, 0));
+		ArrayList<Point> sPoints = this.traversalSurroundPoints(this.startPoint);
 		
+		
+		
+		
+		
+		// 
+		
+
 		p("OpenedList:");
 		printHashMapList(this.openList);
 		
@@ -95,26 +102,38 @@ public class AStar {
 		
 	}
 	
-	
-	
-	/**
-	 * find 
-	 * 
-	 * */
-	
-	
-	public static void p(Object o)
+	public Point findMinPoint()
 	{
-		System.out.println(o.toString());
+		Point p = null;
+				
+		return p;
 	}
 	
 	
+
+	public ArrayList<Point> checkPoint(Point p, ArrayList<Point> surroundPoints){
+		if (p.walkable == 0) {
+			surroundPoints.add(p);
+			
+			if(this.openList.get(p.getKey()) == null )
+				this.openList.put(p.getKey(), p);
+			
+		} else if(this.closeList.get(p.getKey()) == null ){
+			this.closeList.put(p.getKey(), p);
+		}
+		
+		return surroundPoints;
+	}
+
 	
-	public void traversalAroundPoints( Point point )
+	
+	public ArrayList<Point> traversalSurroundPoints( Point point )
 	{
 		
 		this.closeList.put(point.getKey(), point);
+		this.openList.remove(point.getKey());
 		
+		ArrayList<Point> surroundPoints = new ArrayList<Point>();
 		
 		// Find out point around specified point and push it to openList
 		Point p = null;
@@ -124,24 +143,23 @@ public class AStar {
 		{
 			// top point 
 			p = this.matrix.get(point.y -1).get(point.x);
-			if (this.openList.get(p.getKey()) == null && p.walkable == 0) this.openList.put(p.getKey(), p);
-			
+			p.g = point.g + this.normalStepCost;
+			surroundPoints = this.checkPoint(p, surroundPoints);
+
 			
 			// left top point
 			if (point.x > 0)
 			{
 				p = this.matrix.get(point.y - 1).get(point.x - 1);
-				if (this.openList.get(p.getKey()) == null && p.walkable == 0)
-					 this.openList.put(p.getKey(), p);
+				p.g = point.g + this.diagonallyStepCost;
+				surroundPoints = this.checkPoint(p, surroundPoints);
 			}
 			
 			// right top point
 			if(point.x < this.columns - 1){
 				p = this.matrix.get(point.y - 1).get(point.x + 1);
-				if (this.openList.get(p.getKey()) == null && p.walkable == 0)
-				{
-					this.openList.put(p.getKey(), p);	
-				}
+				p.g = point.g + this.diagonallyStepCost;
+				surroundPoints = this.checkPoint(p, surroundPoints);
 			} 
 		} 
 		
@@ -149,40 +167,40 @@ public class AStar {
 		{
 			// bottom
 			p = this.matrix.get(point.y + 1).get(point.x);
-			if (this.openList.get(p.getKey()) == null && p.walkable == 0) this.openList.put(p.getKey(), p);
+			p.g = point.g + this.normalStepCost;
+			surroundPoints = this.checkPoint(p, surroundPoints);
 			
 			
 			if (point.x > 0)
 			{
 				p = this.matrix.get(point.y + 1).get(point.x - 1);
-				if (this.openList.get(p.getKey()) == null && p.walkable == 0)
-					 this.openList.put(p.getKey(), p);
+				p.g = point.g + this.diagonallyStepCost;
+				surroundPoints = this.checkPoint(p, surroundPoints);
 			}
 			
 			if(point.x < this.columns - 1){
 				p = this.matrix.get(point.y + 1).get(point.x + 1);
-				if (this.openList.get(p.getKey()) == null && p.walkable == 0)
-				{
-					this.openList.put(p.getKey(), p);	
-				}
+				p.g = point.g + this.diagonallyStepCost;
+				surroundPoints = this.checkPoint(p, surroundPoints);
 			} 
 		}
 		
 		if (point.x > 0) {
 			// left point
 			p = this.matrix.get(point.y).get(point.x - 1);
-			if (this.openList.get(p.getKey()) == null && p.walkable == 0) this.openList.put(point.getKey(), p);
+			p.g = point.g + this.normalStepCost;
+			surroundPoints = this.checkPoint(p, surroundPoints);
 		}
 		
 		// right top point
 		if(point.x < this.columns - 1){
 			p = this.matrix.get(point.y).get(point.x + 1);
-			if (this.openList.get(p.getKey()) == null && p.walkable == 0)
-			{
-				this.openList.put(p.getKey(), p);	
-			}
+			p.g = point.g + this.normalStepCost;
+			surroundPoints = this.checkPoint(p, surroundPoints);
 		} 
 		
+		
+		return surroundPoints;
 	}
 	
 	
@@ -209,6 +227,11 @@ public class AStar {
 	}
 	
 	
+	
+	public static void p(Object o)
+	{
+		System.out.println(o.toString());
+	}
 	
 	
 	/***
