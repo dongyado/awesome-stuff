@@ -9,7 +9,7 @@ package top.shares.funny.astar;
 
 public class Point {
 	
-	public Point parent;
+	public Point parent = null;
 	
 	public int h;
 	public int g;

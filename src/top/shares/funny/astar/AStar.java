@@ -78,8 +78,10 @@ public class AStar {
 		
 		Point end = searchPath();
 		
+		p("end:");
 		p(end);
 		
+		this.printPath(end);
 		
 		// printMatrix
 		p("Matrix:");
@@ -92,15 +94,13 @@ public class AStar {
 		this.openList.put(this.startPoint.getKey(), this.startPoint);
 		while(this.openList.size() != 0)
 		{
-			ArrayList<Point> sPoints = this.traversalSurroundPoints(this.startPoint);
-			
 			Point currentPoint = this.findMinPoint(this.openList);
 			this.closeList.put(currentPoint.getKey(), currentPoint);
 			this.openList.remove(currentPoint.getKey());
+			ArrayList<Point> sPoints = this.traversalSurroundPoints(currentPoint);
 			
 			p("Min points:");
 			p(currentPoint);
-
 			
 			Iterator<Point> it = sPoints.iterator();
 			Point p = null;
@@ -129,15 +129,31 @@ public class AStar {
 //			
 			if(this.openList.get(this.endPoint.getKey()) != null)
 			{
-				return this.endPoint;
+				return this.openList.get(this.endPoint.getKey());
 			}
 			
-			break;
 		}
-		
 		return null;
 	}
 	
+	public void printPath(Point end){
+		Point p = null;
+		p("/---------------------");
+		p = end;
+		while(p != null )
+		{
+			p(p);
+			p = p.parent;
+		}
+		
+		p("/---------------------");
+//		p("OpenedList:");
+//		printHashMapList(this.openList);
+//		
+//		
+//		p("ClosedList:");
+//		printHashMapList(this.closeList);
+	}
 	
 	
 	
@@ -150,7 +166,6 @@ public class AStar {
 	
 	public Point findMinPoint(HashMap<String, Point> list)
 	{
-		this.printHashMapList(list);
 		Point p = null;
 		Set<Entry<String, Point>> set = list.entrySet();
 		
@@ -174,7 +189,10 @@ public class AStar {
 	
 	
 
-	public ArrayList<Point> checkPoint(Point p, Point parent, ArrayList<Point> surroundPoints, int type){
+	public ArrayList<Point> checkPoint(Point p, Point parent, ArrayList<Point> surroundPoints, int type)
+	{
+		if (this.closeList.get(p.getKey()) != null) return surroundPoints;
+		
 		if (p.walkable == 0) {
 			surroundPoints.add(p);
 			
