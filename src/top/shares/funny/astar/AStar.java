@@ -75,25 +75,10 @@ public class AStar {
 		// -------------------------------------------------------------------
 		// search start
 		this.startPoint.g = 0;
-		this.openList.put(this.startPoint.getKey(), this.startPoint);
 		
+		Point end = searchPath();
 		
-		
-		ArrayList<Point> sPoints = this.traversalSurroundPoints(this.startPoint);
-		
-		
-		
-		
-		
-		// 
-		
-
-		p("OpenedList:");
-		printHashMapList(this.openList);
-		
-		p("ClosedList:");
-		printHashMapList(this.closeList);
-		
+		p(end);
 		
 		
 		// printMatrix
@@ -102,21 +87,103 @@ public class AStar {
 		
 	}
 	
-	public Point findMinPoint()
+	public Point searchPath()
 	{
-		Point p = null;
+		this.openList.put(this.startPoint.getKey(), this.startPoint);
+		while(this.openList.size() != 0)
+		{
+			ArrayList<Point> sPoints = this.traversalSurroundPoints(this.startPoint);
+			
+			Point currentPoint = this.findMinPoint(this.openList);
+			this.closeList.put(currentPoint.getKey(), currentPoint);
+			this.openList.remove(currentPoint.getKey());
+			
+			p("Min points:");
+			p(currentPoint);
+
+			
+			Iterator<Point> it = sPoints.iterator();
+			Point p = null;
+			int type = 0;
+			int tempCost = 0;
+			
+			while(it.hasNext())
+			{
+				p = it.next();
 				
+				type = this.findMoveType(currentPoint, p);
+				tempCost = type == 1 ? currentPoint.g + this.normalStepCost : currentPoint.g + this.diagonallyStepCost;
+				
+				if (tempCost < p.g) {
+					p.g = tempCost;
+					p.parent = currentPoint;
+				}
+			}
+			
+//
+//			p("OpenedList:");
+//			printHashMapList(this.openList);
+//		
+//			p("ClosedList:");
+//			printHashMapList(this.closeList);
+//			
+			if(this.openList.get(this.endPoint.getKey()) != null)
+			{
+				return this.endPoint;
+			}
+			
+			break;
+		}
+		
+		return null;
+	}
+	
+	
+	
+	
+	public int findMoveType(Point parent, Point next){
+		
+		if (parent.x == next.x || parent.y == next.y) return 1;
+		
+		return 2;
+	}
+	
+	public Point findMinPoint(HashMap<String, Point> list)
+	{
+		this.printHashMapList(list);
+		Point p = null;
+		Set<Entry<String, Point>> set = list.entrySet();
+		
+		Iterator<Entry<String, Point>> it = set.iterator();
+		
+		Entry<String, Point> e = null;
+		if(it.hasNext())
+			p = it.next().getValue();
+		
+		while(it.hasNext())
+		{
+			e = it.next();
+			
+			if(e.getValue().getF() < p.getF())
+				p = e.getValue();
+
+		}
+		
 		return p;
 	}
 	
 	
 
-	public ArrayList<Point> checkPoint(Point p, ArrayList<Point> surroundPoints){
+	public ArrayList<Point> checkPoint(Point p, Point parent, ArrayList<Point> surroundPoints, int type){
 		if (p.walkable == 0) {
 			surroundPoints.add(p);
 			
-			if(this.openList.get(p.getKey()) == null )
+			if(this.openList.get(p.getKey()) == null ){
+				p.parent = parent;
+				p.g = type == 1 ?  parent.g + this.normalStepCost : parent.g + this.diagonallyStepCost;
 				this.openList.put(p.getKey(), p);
+			}
+				
 			
 		} else if(this.closeList.get(p.getKey()) == null ){
 			this.closeList.put(p.getKey(), p);
@@ -143,23 +210,20 @@ public class AStar {
 		{
 			// top point 
 			p = this.matrix.get(point.y -1).get(point.x);
-			p.g = point.g + this.normalStepCost;
-			surroundPoints = this.checkPoint(p, surroundPoints);
+			surroundPoints = this.checkPoint(p, point,  surroundPoints, 1);
 
 			
 			// left top point
 			if (point.x > 0)
 			{
 				p = this.matrix.get(point.y - 1).get(point.x - 1);
-				p.g = point.g + this.diagonallyStepCost;
-				surroundPoints = this.checkPoint(p, surroundPoints);
+				surroundPoints = this.checkPoint(p, point, surroundPoints,2 );
 			}
 			
 			// right top point
 			if(point.x < this.columns - 1){
 				p = this.matrix.get(point.y - 1).get(point.x + 1);
-				p.g = point.g + this.diagonallyStepCost;
-				surroundPoints = this.checkPoint(p, surroundPoints);
+				surroundPoints = this.checkPoint(p, point,  surroundPoints, 2);
 			} 
 		} 
 		
@@ -167,36 +231,31 @@ public class AStar {
 		{
 			// bottom
 			p = this.matrix.get(point.y + 1).get(point.x);
-			p.g = point.g + this.normalStepCost;
-			surroundPoints = this.checkPoint(p, surroundPoints);
+			surroundPoints = this.checkPoint(p, point,  surroundPoints, 1);
 			
 			
 			if (point.x > 0)
 			{
 				p = this.matrix.get(point.y + 1).get(point.x - 1);
-				p.g = point.g + this.diagonallyStepCost;
-				surroundPoints = this.checkPoint(p, surroundPoints);
+				surroundPoints = this.checkPoint(p, point, surroundPoints, 2);
 			}
 			
 			if(point.x < this.columns - 1){
 				p = this.matrix.get(point.y + 1).get(point.x + 1);
-				p.g = point.g + this.diagonallyStepCost;
-				surroundPoints = this.checkPoint(p, surroundPoints);
+				surroundPoints = this.checkPoint(p, point,  surroundPoints, 2);
 			} 
 		}
 		
 		if (point.x > 0) {
 			// left point
 			p = this.matrix.get(point.y).get(point.x - 1);
-			p.g = point.g + this.normalStepCost;
-			surroundPoints = this.checkPoint(p, surroundPoints);
+			surroundPoints = this.checkPoint(p, point,  surroundPoints, 1);
 		}
 		
 		// right top point
 		if(point.x < this.columns - 1){
 			p = this.matrix.get(point.y).get(point.x + 1);
-			p.g = point.g + this.normalStepCost;
-			surroundPoints = this.checkPoint(p, surroundPoints);
+			surroundPoints = this.checkPoint(p,  point, surroundPoints, 1);
 		} 
 		
 		
