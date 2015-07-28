@@ -90,7 +90,7 @@ public class AStar {
 		
 		// printMatrix
 		//p("Matrix:");
-		//printMatrix(this.matrix);
+		printMatrix(this.matrix);
 		
 	}
 	

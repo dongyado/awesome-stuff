@@ -18,6 +18,19 @@ public class Point {
 	public int x;
 	public int y;
 	
+	public String key;
+	
+	// 0 : walkable, 1 : not walkable
+	public int walkable = 0;
+	
+	public Point(int x, int y, int walkable)
+	{
+		this.x = x;
+		this.y = y;
+		this.walkable = walkable;
+		this.key = this.x + "_" + y;
+	}
+	
 	public int getF(){
 		return this.g + this.h;
 	}
@@ -34,16 +47,4 @@ public class Point {
 	public String getPosition(){
 		return "["+ this.x+ ":" + this.y + "]";
 	}
-	// walkable;
-	public int walkable = 0;
-	
-	public Point(int x, int y, int walkable)
-	{
-		this.x = x;
-		this.y = y;
-		this.walkable = walkable;
-	}
-	
-
-	
 }
