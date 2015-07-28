@@ -31,29 +31,34 @@ public class AStar {
 	
 	private int normalStepCost = 10;
 	private int diagonallyStepCost = 14;
-	private HashMap<String, Point> openList = new HashMap<String, Point>();
-	private HashMap<String, Point> closeList = new HashMap<String, Point>();
+	private HashMap<String, Point> openList 	= new HashMap<String, Point>();
+	private HashMap<String, Point> closeList 	= new HashMap<String, Point>();
+	private HashMap<String, Point> paths 		= new HashMap<String, Point>();
 
-	private Point startPoint = new Point(2, 3, 0);
-	private Point endPoint = new Point(6, 3, 0);
+	private Point startPoint = new Point(1, 3, 0);
+	private Point endPoint = new Point(8, 3, 0);
 	
 	private ArrayList<ArrayList<Point>> matrix = new ArrayList<ArrayList<Point>>();
-	private int rows = 7;
-	private int columns = 10;
+	private int rows = 0;
+	private int columns = 0;
 	
 	// 1 stands not walkable
 	private int[][] map  = new int[][]{
 		{0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,1,0,0,0,0,0},
-		{0,0,0,0,1,0,0,0,0,0},
-		{0,0,0,0,1,0,0,0,0,0},
+		{0,0,0,1,1,1,1,0,0,0},
+		{0,0,0,0,0,0,1,0,0,0},
+		{0,0,0,1,1,1,1,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0,0}
 	};
 
 	
 	public AStar() {
+		// get size of matrix
+		this.rows = this.map.length;
+		this.columns = this.map[0].length;
+		
 		
 		// create matrix and calculate h of each point 
 		// 	according to start point and end point
@@ -72,7 +77,7 @@ public class AStar {
 			this.matrix.add(list);
 		}
 		
-		// -------------------------------------------------------------------
+
 		// search start
 		this.startPoint.g = 0;
 		
@@ -84,8 +89,8 @@ public class AStar {
 		this.printPath(end);
 		
 		// printMatrix
-		p("Matrix:");
-		printMatrix(this.matrix);
+		//p("Matrix:");
+		//printMatrix(this.matrix);
 		
 	}
 	
@@ -97,6 +102,7 @@ public class AStar {
 			Point currentPoint = this.findMinPoint(this.openList);
 			this.closeList.put(currentPoint.getKey(), currentPoint);
 			this.openList.remove(currentPoint.getKey());
+			
 			ArrayList<Point> sPoints = this.traversalSurroundPoints(currentPoint);
 			
 			p("Min points:");
@@ -127,6 +133,7 @@ public class AStar {
 //			p("ClosedList:");
 //			printHashMapList(this.closeList);
 //			
+			// found
 			if(this.openList.get(this.endPoint.getKey()) != null)
 			{
 				return this.openList.get(this.endPoint.getKey());
@@ -136,27 +143,35 @@ public class AStar {
 		return null;
 	}
 	
+
+	/**
+	 * print the point of path
+	 * 
+	 * */
+	
 	public void printPath(Point end){
+		
 		Point p = null;
-		p("/---------------------");
+		p("--------path---------");
 		p = end;
+		this.paths.put(end.getKey(), p);
 		while(p != null )
 		{
-			p(p);
+			this.paths.put(p.getKey(), p);
+			p(p.getPosition());
 			p = p.parent;
 		}
 		
-		p("/---------------------");
-//		p("OpenedList:");
-//		printHashMapList(this.openList);
-//		
-//		
-//		p("ClosedList:");
-//		printHashMapList(this.closeList);
+		p("---------------------");
+		
+		printMatrixWithPath(this.matrix, this.paths);
 	}
 	
 	
-	
+	/**
+	 *  find move directly or diagonally
+	 * 
+	 * */
 	public int findMoveType(Point parent, Point next){
 		
 		if (parent.x == next.x || parent.y == next.y) return 1;
@@ -164,6 +179,11 @@ public class AStar {
 		return 2;
 	}
 	
+	
+	/**
+	 * find the min F point
+	 * 
+	 * */
 	public Point findMinPoint(HashMap<String, Point> list)
 	{
 		Point p = null;
@@ -188,7 +208,10 @@ public class AStar {
 	}
 	
 	
-
+	/**
+	 * check point 
+	 * 
+	 * */
 	public ArrayList<Point> checkPoint(Point p, Point parent, ArrayList<Point> surroundPoints, int type)
 	{
 		if (this.closeList.get(p.getKey()) != null) return surroundPoints;
@@ -211,7 +234,10 @@ public class AStar {
 	}
 
 	
-	
+	/**
+	 * get points surround the specified point
+	 * 
+	 * */
 	public ArrayList<Point> traversalSurroundPoints( Point point )
 	{
 		
@@ -304,23 +330,22 @@ public class AStar {
 	}
 	
 	
-	
+	/**
+	 * print 
+	 * 
+	 * */
 	public static void p(Object o)
 	{
 		System.out.println(o.toString());
 	}
 	
-	
 	/***
-	 * print verbose information of spechifid matrix
+	 * print verbose information of specified matrix
 	 * 
 	 * 
 	 * */
-	public static void printMatrix(ArrayList<ArrayList<Point>> matrix)
+	public static void printMatrixWithPath(ArrayList<ArrayList<Point>> matrix, HashMap<String, Point> paths)
 	{
-		int rows = matrix.size();
-		int colums = matrix.get(0).size();
-		
 		Iterator<ArrayList<Point>> rowIt = matrix.iterator();
 		ArrayList<Point> row = null;
 		
@@ -334,17 +359,53 @@ public class AStar {
 			while(it.hasNext())
 			{
 				p = it.next();
-				System.out.print(p);
+				//System.out.print(p);
+				if (paths.containsKey(p.getKey())) {
+					System.out.print("[*]");
+				}else if(p.walkable == 1){
+					System.out.print("[x]");
+				} else {
+					System.out.print("[ ]");
+				}
+				
+			}
+			System.out.println("}");
+		}
+	}
+	
+
+	/***
+	 * print verbose information of specified matrix
+	 * 
+	 * 
+	 * */
+	public static void printMatrix(ArrayList<ArrayList<Point>> matrix)
+	{
+		Iterator<ArrayList<Point>> rowIt = matrix.iterator();
+		ArrayList<Point> row = null;
+		
+		Iterator<Point> it = null;
+		Point p = null;
+		while(rowIt.hasNext())
+		{
+			row  = rowIt.next();
+			it = row.iterator();
+			System.out.print("{");
+			while(it.hasNext())
+			{
+				p = it.next();
+				//System.out.print(p);
+				System.out.print(p.getPosition());
 			}
 			System.out.println("}");
 		}
 		
 	}
 
-
+	// start
 	public static void main(String[] args){
 		
-		AStar star = new AStar();
+		new AStar();
 
 	}
 

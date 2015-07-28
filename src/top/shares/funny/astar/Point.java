@@ -14,14 +14,9 @@ public class Point {
 	public int h;
 	public int g;
 	
-	// f = g + h;
-	private int f;
-	
 	// position
 	public int x;
 	public int y;
-	
-	private String key = null;
 	
 	public int getF(){
 		return this.g + this.h;
@@ -36,6 +31,9 @@ public class Point {
 		return "[" + this.x + ":" + this.y + ":" + this.walkable + ":" + this.g + ":" + this.h + ":"+ this.getF() +"]";
 	}
 	
+	public String getPosition(){
+		return "["+ this.x+ ":" + this.y + "]";
+	}
 	// walkable;
 	public int walkable = 0;
 	
