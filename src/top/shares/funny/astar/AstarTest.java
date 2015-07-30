@@ -33,9 +33,8 @@ public class AstarTest {
 			{ 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 		};
 		
-		ArrayList<String> barriers = new ArrayList<String>();
+//		ArrayList<String> barriers = new ArrayList<String>();
 		
-		ArrayList<String> list = new ArrayList<String>();
 //		barriers.add("4_5");
 //		barriers.add("5_5");
 //		barriers.add("6_5");
@@ -54,7 +53,7 @@ public class AstarTest {
 		//int[][] newMap = createMap(10,20, barriers);
 		//printMap(newMap);
 		
-		// small map test start
+		// big map test start
 		Point startPoint = new Point(1, 3, 0);
 		Point endPoint = new Point(18, 3, 0);
 
