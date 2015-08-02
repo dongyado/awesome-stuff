@@ -10,6 +10,7 @@ Implement or solve:
 * lru cache
 * reverse bits
 * compare version
+* A* search
 
 ### data structure
 * linked list
