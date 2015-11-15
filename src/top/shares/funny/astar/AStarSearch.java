@@ -88,6 +88,8 @@ public class AStarSearch {
 		while(this.openedList.size() > 0)
 		{
 			currentPoint = getMinPoint(this.openedList);
+//			System.out.print(currentPoint.getPosition() + "\n");
+			
 			this.closedList.put(currentPoint.key, currentPoint);
 			this.openedList.remove(currentPoint.key);
 			
@@ -105,6 +107,7 @@ public class AStarSearch {
 				// add new point to opened list
 				if (this.openedList.containsKey(p.key) == false)
 				{
+//					System.out.print("add:" + p.getPosition() + "\n");
 					p.parent = currentPoint;
 					p.g = 	this.getMoveType(p, currentPoint) == 1 
 							?  currentPoint.g + this.normalStepCost 
@@ -119,8 +122,12 @@ public class AStarSearch {
 									? currentPoint.g + this.normalStepCost 
 									: currentPoint.g + this.diagonallyStepCost;
 					
+					if (p.parent != null)
+						tempCost += p.parent.g;
+					
 					// find a least step
 					if (tempCost < p.g) {
+						
 						p.g = tempCost;
 						p.parent = currentPoint;
 					}
@@ -180,16 +187,19 @@ public class AStarSearch {
 		Entry<String, Point> e = null;
 		if(it.hasNext())
 			p = it.next().getValue();
-		
+//		System.out.println("!++++ min   ++!");
 		while(it.hasNext())
 		{
 			e = it.next();
 			
+			
 			if(e.getValue().getF() < p.getF())
 				p = e.getValue();
+			
+//			System.out.print( p.getPosition() + " - ");
 
 		}
-		
+//		System.out.println("");
 		return p;
 	}
 	
@@ -305,12 +315,24 @@ public class AStarSearch {
 		ArrayList<Point> row = null;
 		
 		Iterator<Point> it = null;
+		int rowNum = 0;
+		int colNum = 0;
 		Point p = null;
-		System.out.println("");
+		System.out.println(" ");
+		
+		System.out.print("   ");
+		for( int col = 0; col < this.matrixColumns; col++)
+		{
+			System.out.print(" "+col+" ");
+		}
+		System.out.println(" ");
+		
 		while(rowIt.hasNext())
 		{
 			row  = rowIt.next();
 			it = row.iterator();
+			System.out.print(" "+rowNum+" ");
+
 			while(it.hasNext())
 			{
 				p = it.next();
@@ -321,9 +343,10 @@ public class AStarSearch {
 					System.out.print("[x]");
 				} else {
 					System.out.print("[ ]");
-				}
-				
+				}				
 			}
+			rowNum++;
+			
 			System.out.println("");
 		}
 	}

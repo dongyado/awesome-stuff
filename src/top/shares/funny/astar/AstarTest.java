@@ -19,6 +19,14 @@ public class AstarTest {
 			{0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0}
 		};
+		int[][] simpleMap  = new int[][]{
+				{0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,1,0,0,0,0,0,0},
+				{0,0,0,1,0,0,0,0,0,0},
+				{0,0,0,1,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0}
+			};
 		
 		int[][] bigMap = new int[][]{
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0 },
@@ -54,29 +62,29 @@ public class AstarTest {
 		//printMap(newMap);
 		
 		// big map test start
-		Point startPoint = new Point(1, 3, 0);
-		Point endPoint = new Point(18, 3, 0);
-
-		AStarSearch search = new AStarSearch(startPoint, endPoint, bigMap);
-		
-		LinkedList<Point> path = search.search();
-		
-		printPath(path);
-		
-		search.printMatrixWithPath();
-		
-		
-		// small map test start
 //		Point startPoint = new Point(1, 3, 0);
-//		Point endPoint = new Point(8, 3, 0);
+//		Point endPoint = new Point(18, 3, 0);
 //
-//		AStarSearch search = new AStarSearch(startPoint, endPoint, map);
+//		AStarSearch search = new AStarSearch(startPoint, endPoint, bigMap);
 //		
 //		LinkedList<Point> path = search.search();
 //		
 //		printPath(path);
 //		
 //		search.printMatrixWithPath();
+//		
+		
+		// small map test start
+		Point startPoint = new Point(1, 2, 0);
+		Point endPoint = new Point(5, 2, 0);
+
+		AStarSearch search = new AStarSearch(startPoint, endPoint, simpleMap);
+		
+		LinkedList<Point> path = search.search();
+		
+		printPath(path);
+		
+		search.printMatrixWithPath();
 
 	}
 	
